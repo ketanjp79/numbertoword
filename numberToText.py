@@ -10,41 +10,45 @@ numDict = zip(num,numText)
 numDict = dict(numDict)
 #print(numDict)
 def numberToText(number):
+    
     number =int(number)
-    n = str(number)
-    global numDict
-    global bigNumbers
-    strText =""
-    while(len(n)>0):    
-        if n in numDict:
-            strText = strText + numDict[n] 
-            
+    if not len(number) > 63:
+        n = str(number)
+        global numDict
+        global bigNumbers
+        strText =""
+        while(len(n)>0):    
+            if n in numDict:
+                strText = strText + numDict[n] 
+
+            else:
+                if len(n)==2:
+                    strText = strText + "" + numDict[str((number /10)*10)]+"-" + numDict[n[1]]
+                if len(n)==3:
+                    strText = numDict[n[0]]+ " Hundred "+ numberToText(n[1:])
+                if len(n)==4:
+                     strText = numDict[n[0]]+ " Thousand "+ numberToText(n[1:])
+                if len(n)==5:
+                     strText = numberToText(n[0:2])+ " Thousand "+ numberToText(n[2:])
+                if len(n)==6:
+                     strText = numberToText(n[0])+ " Hundred "+ numberToText(n[1:])
+
+                if len(n)>6:
+                    rem = (len(n)-6)%3
+                    quot =(len(n)-7)/3
+
+                    numberWord = bigNumbers[quot]
+                    if rem == 0:
+                        strText = numberToText(n[0:3])+" "+numberWord+" "+ numberToText(n[3:])
+                    if rem ==1:
+                        strText = numberToText(n[0])+ " "+ numberWord+" "+ numberToText(n[1:])
+                    if rem ==2:
+                        strText = numberToText(n[0:2])+ " "+ numberWord+" "+ numberToText(n[2:])   
+
+            return strText
         else:
-            if len(n)==2:
-                strText = strText + "" + numDict[str((number /10)*10)]+"-" + numDict[n[1]]
-            if len(n)==3:
-                strText = numDict[n[0]]+ " Hundred "+ numberToText(n[1:])
-            if len(n)==4:
-                 strText = numDict[n[0]]+ " Thousand "+ numberToText(n[1:])
-            if len(n)==5:
-                 strText = numberToText(n[0:2])+ " Thousand "+ numberToText(n[2:])
-            if len(n)==6:
-                 strText = numberToText(n[0])+ " Hundred "+ numberToText(n[1:])
-            
-            if len(n)>6:
-                rem = (len(n)-6)%3
-                quot =(len(n)-7)/3
-                
-                numberWord = bigNumbers[quot]
-                if rem == 0:
-                    strText = numberToText(n[0:3])+" "+numberWord+" "+ numberToText(n[3:])
-                if rem ==1:
-                    strText = numberToText(n[0])+ " "+ numberWord+" "+ numberToText(n[1:])
-                if rem ==2:
-                    strText = numberToText(n[0:2])+ " "+ numberWord+" "+ numberToText(n[2:])   
-
-        return strText
-
+            print("your number must be less than 63 digist"
+        
 
 
 #main program
@@ -52,11 +56,7 @@ if __name__ == "__main__":
     response = input("Enter Number to Convert,'Q' or 'q' to Exit: ")
     try:
         while int (response):
-            if not len(str(response))>63:
-                print ("You entered number with length %d"%(len(str(response))))
-            
                 print(numberToText(response))
-            else:
                 print ("To Big Number")
             
         
